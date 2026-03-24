@@ -46,3 +46,7 @@ networks:
     ipam:
       config:
         - subnet: ${SUBNET_VLLM}
+
+volumes:
+  models:
+  lora_adapters:
