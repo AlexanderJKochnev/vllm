@@ -1,0 +1,48 @@
+services:
+  vllm-server:
+    image: vllm/vllm-openai:latest
+    container_name: vllm-node
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - HF_TOKEN=${HF_TOKEN}
+      # Передаем настройки прокси внутрь для скачивания моделей
+      - http_proxy=${HTTP_PROXY}
+      - https_proxy=${HTTPS_PROXY}
+      - no_proxy=${NO_PROXY}
+      - HUGGINGFACE_HUB_CACHE=/root/.cache/huggingface
+    ports:
+      - "8000:8000"
+    volumes:
+      - models:/root/.cache/huggingface
+      - lora_adapters:/app/lora
+    networks:
+      vllm_network:
+        ipv4_address: ${IP_VLLM}
+    command: >
+      --model qwen/Qwen3-8B-Instruct
+      --enable-lora
+      --max-loras 4
+      --lora-modules
+        translator=/app/lora/qwen3-translator
+        analyzer=/app/lora/qwen3-analyzer
+      --gpu-memory-utilization 0.85
+      --max-model-len 4096
+      --dtype half
+      --trust-remote-code
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+networks:
+  vllm_network:
+    name: ollama_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${SUBNET_VLLM}
