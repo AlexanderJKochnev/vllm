@@ -15,7 +15,7 @@ services:
       - HTTP_PROXY=http://nginx:80
       - HTTPS_PROXY=http://nginx:80
       - NO_PROXY=localhost,127.0.0.1,.local,.abc8888.ru,172.0.0.0/8
-      - VLLM_USE_MODELSCOPE=True
+      # - VLLM_USE_MODELSCOPE=True
       # Игнорируем прокси для HuggingFace
       - NO_PROXY=huggingface.co,cdn-lfs.huggingface.co,.huggingface.co
     ports:
