@@ -21,8 +21,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - models:/root/.cache/huggingface
-      - lora_adapters:/app/lora
+      - mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
+      - mnt/hdd_data/volumes/vllm_node/lora_adapters:/app/lora
     networks:
       vllm_network:
         ipv4_address: ${IP_VLLM}
@@ -53,7 +53,3 @@ networks:
     ipam:
       config:
         - subnet: ${SUBNET_VLLM}
-
-volumes:
-  models:
-  lora_adapters:
