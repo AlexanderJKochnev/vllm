@@ -21,8 +21,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
-      - mnt/hdd_data/volumes/vllm_node/lora_adapters:/app/lora
+      - /mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
+      - /mnt/hdd_data/volumes/vllm_node/lora_adapters:/app/lora
     networks:
       vllm_network:
         ipv4_address: ${IP_VLLM}
