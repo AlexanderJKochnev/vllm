@@ -27,7 +27,7 @@ services:
       vllm_network:
         ipv4_address: ${IP_VLLM}
     command: >
-      --model qwen/Qwen3-8B-Instruct
+      --model qwen/Qwen3-8B-Base
       --enable-lora
       --max-loras 4
       --lora-modules
