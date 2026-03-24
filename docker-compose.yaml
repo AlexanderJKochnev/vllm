@@ -41,7 +41,7 @@ services:
 
 networks:
   vllm_network:
-    name: ollama_network
+    name: vllm_network
     driver: bridge
     ipam:
       config:
