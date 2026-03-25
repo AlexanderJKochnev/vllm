@@ -6,7 +6,7 @@ services:
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - HF_TOKEN=${HF_TOKEN}
-      - HF_HUB_ENABLE_HF_TRANSFER=1
+      # - HF_HUB_ENABLE_HF_TRANSFER=1
       - HF_DEBUG=1
       # - HF_ENDPOINT=https://hf-mirror.com
       # - HTTP_PROXY=http://nginx:80
@@ -25,17 +25,12 @@ services:
       vllm_network:
         ipv4_address: ${IP_VLLM}
     command: >
-      --model unsloth/Qwen2.5-7B-Instruct-bnb-4bit
-      --quantization bitsandbytes
-      --load-format bitsandbytes
+      --model Qwen/Qwen2.5-7B-Instruct-AWQ
+      --quantization awq
       --enable-lora
       --max-loras 2
-      --lora-modules
-        translator=/app/lora/qwen3-translator
-        analyzer=/app/lora/qwen3-analyzer
-      --gpu-memory-utilization 0.90
+      --gpu-memory-utilization 0.7
       --max-model-len 2048
-      --max-num-seqs 16
       --trust-remote-code
     deploy:
       resources:
