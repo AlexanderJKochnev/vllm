@@ -30,7 +30,7 @@ services:
         ipv4_address: ${IP_VLLM}
     command: >
       --model Qwen/Qwen2.5-7B-Instruct-AWQ
-      --quantization awq_marlin
+      --quantization marlin
       --gpu-memory-utilization 0.9
       --enable-prefix-caching
       --max-model-len 4096
