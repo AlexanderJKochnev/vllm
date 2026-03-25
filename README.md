@@ -15,6 +15,25 @@ vllm service
 8. hf download Qwen/Qwen3-8B --local-dir /mnt/hdd_data/volumes/vllm_node/models
 9. hf download Qwen3-4B-Instruct-2507-FP8 --local-dir /mnt/hdd_data/volumes/vllm_node/qwen3_4
 10. hf download google/translategemma-4b-it --local-dir /mnt/hdd_data/volumes/vllm_node/translategemma-4b-it
+ ## кстановка hf
+11. curl -LsSf https://astral.sh/uv/install.sh | sh
+12. source $HOME/.local/bin/env
+13. uvx hf auth login
+14. uvx hf models ls --author Qwen
+15. # List trending models
+>>> hf models ls
+
+# Search for models
+>>> hf models ls --search "lora"
+
+# Filter by author
+>>> hf models ls --author Qwen
+
+# Filter by parameter count
+>>> hf models ls --num-parameters min:6B,max:128B
+
+# Sort by downloads
+>>> hf models ls --sort downloads --limit 10
 
 
 

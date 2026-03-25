@@ -15,6 +15,7 @@ services:
       # - VLLM_USE_MODELSCOPE=True
       # Игнорируем прокси для HuggingFace
       - NO_PROXY=huggingface.co,cdn-lfs.huggingface.co,.huggingface.co
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
     ports:
       - "8000:8000"
     volumes:
@@ -24,15 +25,17 @@ services:
       vllm_network:
         ipv4_address: ${IP_VLLM}
     command: >
-      --model Qwen/Qwen3-8B
+      --model unsloth/Qwen2.5-7B-Instruct-bnb-4bit
+      --quantization bitsandbytes
+      --load-format bitsandbytes
       --enable-lora
-      --max-loras 4
+      --max-loras 2
       --lora-modules
         translator=/app/lora/qwen3-translator
         analyzer=/app/lora/qwen3-analyzer
-      --gpu-memory-utilization 0.85
-      --max-model-len 4096
-      --dtype half
+      --gpu-memory-utilization 0.90
+      --max-model-len 2048
+      --max-num-seqs 16
       --trust-remote-code
     deploy:
       resources:
