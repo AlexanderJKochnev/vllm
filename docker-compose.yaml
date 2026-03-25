@@ -6,14 +6,11 @@ services:
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - HF_TOKEN=${HF_TOKEN}
-      # Передаем настройки прокси внутрь для скачивания моделей
-      # - http_proxy=${HTTP_PROXY}
-      # - https_proxy=${HTTPS_PROXY}
-      #  - no_proxy=${NO_PROXY}
-      # - HUGGINGFACE_HUB_CACHE=/root/.cache/huggingface
-      # Настройка прокси через nginx (если nginx проксирует на внешний мир)
-      - HTTP_PROXY=http://nginx:80
-      - HTTPS_PROXY=http://nginx:80
+      - HF_HUB_ENABLE_HF_TRANSFER=1
+      - HF_DEBUG=1
+      - HF_ENDPOINT=https://hf-mirror.com
+      # - HTTP_PROXY=http://nginx:80
+      # - HTTPS_PROXY=http://nginx:80
       - NO_PROXY=localhost,127.0.0.1,.local,.abc8888.ru,172.0.0.0/8
       # - VLLM_USE_MODELSCOPE=True
       # Игнорируем прокси для HuggingFace
