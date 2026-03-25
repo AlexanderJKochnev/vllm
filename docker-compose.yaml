@@ -35,6 +35,7 @@ services:
       --enable-prefix-caching
       --max-model-len 4096
       --trust-remote-code
+      --disable-log-requests
     deploy:
       resources:
         reservations:
