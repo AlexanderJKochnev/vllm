@@ -37,7 +37,6 @@ services:
       --trust-remote-code
       --disable-log-requests
       --max-seq-len-to-capture 4096
-      --use-v2-block-manager false
     deploy:
       resources:
         reservations:
