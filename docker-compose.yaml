@@ -32,7 +32,6 @@ services:
       --max-loras 2
       --gpu-memory-utilization 0.7
       --max-model-len 4096
-      # --max-model-len 2048
       --trust-remote-code
     deploy:
       resources:
