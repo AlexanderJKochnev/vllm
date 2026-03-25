@@ -6,6 +6,8 @@ services:
     environment:
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
       - NVIDIA_VISIBLE_DEVICES=all
+      - HF_HUB_OFFLINE=1
+      - TRANSFORMERS_OFFLINE=1
       - HF_TOKEN=${HF_TOKEN}
       # - HF_HUB_ENABLE_HF_TRANSFER=1
       - HF_DEBUG=1
@@ -28,8 +30,6 @@ services:
     command: >
       --model Qwen/Qwen2.5-7B-Instruct-AWQ
       --quantization awq
-      --enable-lora
-      --max-loras 2
       --gpu-memory-utilization 0.7
       --enforce-eager
       --enable-prefix-caching
