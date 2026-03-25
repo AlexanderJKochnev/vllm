@@ -4,6 +4,7 @@ services:
     container_name: vllm-node
     runtime: nvidia
     environment:
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
       - NVIDIA_VISIBLE_DEVICES=all
       - HF_TOKEN=${HF_TOKEN}
       # - HF_HUB_ENABLE_HF_TRANSFER=1
@@ -30,7 +31,8 @@ services:
       --enable-lora
       --max-loras 2
       --gpu-memory-utilization 0.7
-      --max-model-len 2048
+      --max-model-len 4096
+      # --max-model-len 2048
       --trust-remote-code
     deploy:
       resources:
