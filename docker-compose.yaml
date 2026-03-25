@@ -32,7 +32,6 @@ services:
       --model Qwen/Qwen2.5-7B-Instruct-AWQ
       --quantization awq_marlin
       --gpu-memory-utilization 0.9
-      --enforce-eager
       --enable-prefix-caching
       --max-model-len 4096
       --trust-remote-code
