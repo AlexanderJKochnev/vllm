@@ -30,7 +30,7 @@ services:
     command: >
       --model Qwen/Qwen2.5-7B-Instruct-AWQ
       --quantization awq
-      --gpu-memory-utilization 0.7
+      --gpu-memory-utilization 0.9
       --enforce-eager
       --enable-prefix-caching
       --max-model-len 4096
