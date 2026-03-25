@@ -31,6 +31,8 @@ services:
       --enable-lora
       --max-loras 2
       --gpu-memory-utilization 0.7
+      --enforce-eager
+      --enable-prefix-caching
       --max-model-len 4096
       --trust-remote-code
     deploy:
