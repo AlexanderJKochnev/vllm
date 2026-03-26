@@ -24,7 +24,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - /mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
+      # - /mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
+      - /mnt/hdd_data/volumes/vllm_node/models/Qwen2.5-7B-GPTQ:/model
       - /mnt/hdd_data/volumes/vllm_node/lora_adapters:/app/lora
     networks:
       vllm_network:
