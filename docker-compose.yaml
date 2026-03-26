@@ -32,7 +32,7 @@ services:
         ipv4_address: ${IP_VLLM}
     command: >
       --model /model
-      --quantization awq
+      --quantization gptq
       --gpu-memory-utilization 0.9
       --enable-prefix-caching
       --max-model-len 4096
