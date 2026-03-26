@@ -4,6 +4,7 @@ services:
     container_name: vllm-node
     runtime: nvidia
     environment:
+      - VLLM_USE_MODELSCOPE=true
       - VLLM_USE_V1=0
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
       - NVIDIA_VISIBLE_DEVICES=all
