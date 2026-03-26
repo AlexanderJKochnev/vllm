@@ -31,7 +31,7 @@ services:
       vllm_network:
         ipv4_address: ${IP_VLLM}
     command: >
-      --model Qwen/Qwen2.5-7B-Instruct-AWQ
+      --model /model
       --quantization awq
       --gpu-memory-utilization 0.9
       --enable-prefix-caching
