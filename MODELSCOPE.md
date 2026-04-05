@@ -11,3 +11,8 @@ volumes:
 modelscope download --model tclf90/qwen2.5-7b-instruct-1m-gptq-int4 \
   --local_dir /mnt/hdd_data/volumes/vllm_node/models/Qwen2.5-7B-GPTQ \
   --revision g128
+
+# Не квантованная модель
+modelscope download --model qwen/Qwen2.5-7B-Instruct \
+  --local_dir /mnt/hdd_data/volumes/vllm_node/models/Qwen2.5-7B \
+  --revision master
