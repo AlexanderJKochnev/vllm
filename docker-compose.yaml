@@ -1,6 +1,7 @@
 services:
   vllm-server:
-    image: vllm/vllm-openai:v0.8.5
+    image: vllm:local
+    # image: vllm/vllm-openai:v0.8.5
     container_name: vllm-node
     runtime: nvidia
     environment:

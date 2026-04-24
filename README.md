@@ -1,4 +1,7 @@
 # vllm
+## попробовать - может дать эффект
+environment:
+    NVIDIA_DISABLE_REQUIRE: true
 vllm service
 0. примонтировать volumes  на внешний диск:
     /mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
