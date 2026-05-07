@@ -36,6 +36,7 @@ services:
       --model /model
       --quantization gptq
       --dtype float16
+      --chat-template-content-format auto
       --gpu-memory-utilization 0.95
       --enforce-eager
       --enable-prefix-caching
