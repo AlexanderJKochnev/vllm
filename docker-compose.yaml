@@ -34,15 +34,14 @@ services:
     command: >
       --model /model
       --quantization gptq
-      --gpu-memory-utilization 0.9
+      --gpu-memory-utilization 0.85
+      --enforce-eager
       --enable-prefix-caching
       --max-model-len 4096
       --trust-remote-code
       --disable-log-requests
-      --max-seq-len-to-capture 4096
-      --chat-template-content-format string
-      --disable-log-stats
       --max-num-seqs 16
+      --disable-log-stats
     deploy:
       resources:
         reservations:
