@@ -35,7 +35,8 @@ services:
     command: >
       --model /model
       --quantization gptq
-      --gpu-memory-utilization 0.85
+      --dtype float16
+      --gpu-memory-utilization 0.95
       --enforce-eager
       --enable-prefix-caching
       --max-model-len 4096
