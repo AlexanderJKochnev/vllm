@@ -1,3 +1,16 @@
+# MODELSCOPE - CHINESE REPOSITORY OF LL MODELS
+1. ## installation
+sudo apt update && sudo apt install pipx
+pipx install uv  ## см инструкции в логах 
+source ~/.bashrc
+
+
+
+
+
+
+
+
 ## download thru modelscope
 uvx modelscope
 uvx modelscope download \
