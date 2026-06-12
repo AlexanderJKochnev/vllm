@@ -45,6 +45,7 @@ services:
       --disable-log-requests
       --max-num-seqs 16
       --disable-log-stats
+      --tokenizer-mode mistral
     deploy:
       resources:
         reservations:
