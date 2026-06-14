@@ -27,7 +27,7 @@ services:
     volumes:
       # - /mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-GPTQ:/model
-      - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-Instruct-GPTQ-Int8
+      - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-Instruct-GPTQ-Int8:/model
       # - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
       # - ${BIND_VOLUMES}/vllm_node/lora_adapters:/app/lora
     networks:
