@@ -27,25 +27,25 @@ services:
     volumes:
       # - /mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-GPTQ:/model
-      - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-Instruct-GPTQ-Int8
-      # - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
-      # - ${BIND_VOLUMES}/vllm_node/lora_adapters:/app/lora
+      - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
+      - ${BIND_VOLUMES}/vllm_node/lora_adapters:/app/lora
     networks:
       vllm_network:
         ipv4_address: ${IP_VLLM}
     command: >
       --model /model
       --quantization gptq
-      --dtype half
-      --chat-template qwen_7b
-      --gpu-memory-utilization 0.85
-      --max-model-len 8192
-      --enable-prefix-caching
-      --max-num-seqs 4
+      --dtype float16
+      --chat-template-content-format auto
+      --gpu-memory-utilization 0.95
       --enforce-eager
-      --disable-log-requests
-      --disable-log-stats
+      --enable-prefix-caching
+      --max-model-len 4096
       --trust-remote-code
+      --disable-log-requests
+      --max-num-seqs 16
+      --disable-log-stats
+      --tokenizer-mode mistral
     deploy:
       resources:
         reservations:
