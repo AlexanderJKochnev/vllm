@@ -13,3 +13,12 @@
 3. hf auth 
 4. hf download Qwen/Qwen2.5-7B-Instruct-GPTQ-Int8 \
   --local-dir /mnt/hdd_data/@named_volumes/vllm_node/models/Qwen2.5-7B-Instruct-GPTQ-Int8
+
+5. google/gemma-3-4b-it 
+hf download google/gemma-3-4b-it \
+  --local-dir /mnt/hdd_data/@named_volumes/vllm_node/models/google/gemma-3-4b-it
+
+# RedHatAI/gemma-3-4b-it-quantized.w4a16
+
+hf download RedHatAI/gemma-3-4b-it-quantized.w4a16 \
+  --local-dir /mnt/hdd_data/@named_volumes/vllm_node/models/google/gemma-3-4b-it-quantized.w4a16

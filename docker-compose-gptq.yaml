@@ -36,15 +36,16 @@ services:
         ipv4_address: ${IP_VLLM}
     command: >
       --model /model
-      --dtype bfloat16
+      --quantization gptq
+      --dtype half
       --gpu-memory-utilization 0.85
-      --max-model-len 4096
-       --enable-prefix-caching
-       --max-num-seqs 4
-       --enforce-eager
-       --disable-log-requests
-       --disable-log-stats
-       --trust-remote-code
+      --max-model-len 8192
+      --enable-prefix-caching
+      --max-num-seqs 4
+      --enforce-eager
+      --disable-log-requests
+      --disable-log-stats
+      --trust-remote-code
     deploy:
       resources:
         reservations:
