@@ -37,7 +37,6 @@ services:
       --model /model
       --quantization gptq
       --dtype half
-      --chat-template qwen_7b
       --gpu-memory-utilization 0.85
       --max-model-len 8192
       --enable-prefix-caching
