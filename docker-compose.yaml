@@ -16,8 +16,8 @@ services:
       # - HF_ENDPOINT=https://hf-mirror.com
       - NO_PROXY=localhost,127.0.0.1,.local,.abc8888.ru,172.0.0.0/8,huggingface.co,cdn-lfs.huggingface.co,.huggingface.co
       - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "127.0.0.1:8000:8000"
     volumes:
       # - /mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-GPTQ:/model
