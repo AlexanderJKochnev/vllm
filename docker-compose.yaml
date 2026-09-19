@@ -39,7 +39,7 @@ services:
       --disable-log-requests
       --disable-log-stats
       --trust-remote-code
-      --max-num-batched-tokens 4096
+      --max-num-batched-tokens 2048
       --enable-chunked-prefill
       
     deploy:
