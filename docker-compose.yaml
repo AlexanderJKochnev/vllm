@@ -32,8 +32,8 @@ services:
     command: >
       --model /model
       --dtype bfloat16
-      --gpu-memory-utilization 0.9
-      --max-model-len 1024
+      --gpu-memory-utilization 0.95
+      --max-model-len 2048
       --enable-prefix-caching
       --max-num-seqs 32
       --disable-log-requests
