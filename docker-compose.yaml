@@ -32,14 +32,16 @@ services:
     command: >
       --model /model
       --dtype bfloat16
-      --gpu-memory-utilization 0.85
+      --gpu-memory-utilization 0.9
       --max-model-len 4096
       --enable-prefix-caching
-      --max-num-seqs 4
-      --enforce-eager
+      --max-num-seqs 32
       --disable-log-requests
       --disable-log-stats
       --trust-remote-code
+      --max-num-batched-tokens 4096
+      --enable-chunked-prefill
+      
     deploy:
       resources:
         reservations:
