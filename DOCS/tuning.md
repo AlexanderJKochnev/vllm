@@ -35,3 +35,6 @@
       --disable-log-requests
       --disable-log-stats
       --trust-remote-code
+
+
+--generation-config vllm
