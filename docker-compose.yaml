@@ -41,7 +41,7 @@ services:
       --trust-remote-code
       --max-num-batched-tokens 2048
       --enable-chunked-prefill
-      
+      --generation-config vllm
     deploy:
       resources:
         reservations:
