@@ -35,7 +35,7 @@ services:
       --gpu-memory-utilization 0.95
       --max-model-len 2048
       --enable-prefix-caching
-      --max-num-seqs 32
+      --max-num-seqs 16
       --disable-log-requests
       --disable-log-stats
       --trust-remote-code
