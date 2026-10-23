@@ -84,6 +84,7 @@ services:
       - "8080:8080"
     volumes:
       - ./laya-ai/models:/models
+      - ${BIND_VOLUMES}/laya-ai/models:/model
     command: >
       -m /models/Laya-BF16.gguf
       --host 0.0.0.0
