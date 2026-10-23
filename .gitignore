@@ -206,7 +206,3 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
-/laya-ai/models/Laya-BF16.gguf
-/laya-ai/models/Laya-Q8_0.gguf
-/laya-ai/models/Laya-BF16.gguf
-/laya-ai/models/Laya-Q8_0.gguf
