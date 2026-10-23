@@ -92,7 +92,7 @@ services:
       -c 2048
       --embeddings
       --pooling mean
-      --override-kv tokenizer.ggml.pooling_type=uint32:1
+      --override-kv tokenizer.ggml.pooling_type=int:1
     restart: unless-stopped
     networks:
       vllm_network:
