@@ -14,6 +14,9 @@ async function getEmbedder(): Promise<Embedder> {
       device: "cpu",
       normalize: true,       // L2-нормализация для косинусного сходства
       cacheSize: 500,        // in-memory кеш результатов
+      model_kwargs: {
+        file_name: "onnx/model.onnx",   // ← ключевое изменение
+        },
     });
   }
   return embedderPromise;
