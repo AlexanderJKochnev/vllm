@@ -91,7 +91,7 @@ services:
       --port 8080
       -c 2048
       --embeddings
-      --poolinп mean
+      --pooling mean
       --override-kv tokenizer.ggml.pooling_type=uint32:1
     restart: unless-stopped
     networks:
