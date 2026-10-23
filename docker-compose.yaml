@@ -91,6 +91,7 @@ services:
       --port 8080
       -c 2048
       --embeddings
+      --pooling mean
     restart: unless-stopped
     networks:
       vllm_network:
