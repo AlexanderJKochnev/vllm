@@ -1,7 +1,15 @@
 # LAYA-AI
 проверка
-curl http://localhost:8080/v1/chat/completions \
+
+curl http://localhost:8080/embeddings \
   -H "Content-Type: application/json" \
   -d '{
-    "messages": [{"role": "user", "content": "Привет! Ты работаешь без PyTorch?"}]
+    "content": "Пример текста для обработки моделью принятия решений"
+  }'
+v1/systemone
+
+curl http://localhost:8080/v1/systemone \
+  -H "Content-Type: application/json" \
+  -d '{
+    "content": "это текст?"
   }'
