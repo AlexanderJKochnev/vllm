@@ -85,7 +85,7 @@ services:
     volumes:
       - ./laya-ai/models:/models
     command: >
-      -m /models/laya_model.gguf
+      -m /models/Laya_BF16.gguf
       --host 0.0.0.0
       --port 8080
       -c 2048
