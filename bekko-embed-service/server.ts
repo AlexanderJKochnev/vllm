@@ -105,7 +105,7 @@ const server = Bun.serve({
 
         // Батч: pipeline принимает массив строк
         const output = await extractor(texts, {
-          pooling: "mean",
+          pooling: "cls",
           normalize: true,
         });
 
