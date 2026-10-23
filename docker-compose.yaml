@@ -51,6 +51,33 @@ services:
               capabilities: [gpu]
     restart: unless-stopped
 
+  bekko-embed:
+    build:
+      context: ./bekko-embed-service          # путь к папке
+      dockerfile: Dockerfile           # имя Dockerfile внутри ./preact_front
+    image: bekko-embed-cpu:local
+    container_name: bekko-embed
+    ports:
+      - "8200:8200"
+    environment:
+      # Ограничиваем потоки ONNX Runtime, чтобы не забивать CPU
+      - OMP_NUM_THREADS=4
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 1G
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "bun", "-e", "fetch('http://localhost:8200/health').then(r=>{if(!r.ok)process.exit(1)})"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      vllm_network:
+
+
 networks:
   vllm_network:
     name: vllm_network
