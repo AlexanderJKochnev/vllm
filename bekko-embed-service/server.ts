@@ -3,31 +3,46 @@ import { pipeline, env } from "@huggingface/transformers";
 // ============================================================
 // 1. Офлайн-режим: никогда не обращаться к huggingface.co
 // ============================================================
-env.allowRemoteModels = false;          // запрет скачивания с HF
-env.localModelPath = "/app/models/";    // корень локальных моделей
-env.useFSCache = false;                 // не искать в старом кеше
+env.allowRemoteModels = false;
+env.localModelPath = "/app/models/";
+env.useFSCache = false;
 
 const PORT = 8200;
-const MODEL_ID = "hotchpotch/bekko-embedding-v1-a8m";
+const DEFAULT_MODEL = "hotchpotch/bekko-embedding-v1-a8m";
 
 // ============================================================
-// 2. Ленивая загрузка: pipeline создаётся при первом запросе
+// 2. Управление текущей моделью (переключение на лету)
 // ============================================================
-let extractorPromise: Promise<any> | null = null;
+let currentModelId: string | null = null;
+let currentExtractor: any = null;
 
-async function getExtractor(): Promise<any> {
-  if (!extractorPromise) {
-    console.log("[bekko] Loading local model on first request...");
-    extractorPromise = pipeline(
-      "feature-extraction",
-      MODEL_ID,
-      {
-        dtype: "fp32",      // соответствует onnx/model.onnx (int8-эмбеддинги внутри файла)
-        device: "cpu",
-      }
-    );
+async function getExtractor(modelId: string): Promise<any> {
+  // Если запрашивается та же модель — возвращаем напрямую
+  if (currentModelId === modelId && currentExtractor) {
+    return currentExtractor;
   }
-  return extractorPromise;
+
+  // Переключение: сначала освобождаем старую модель
+  if (currentExtractor) {
+    console.log(`[bekko] Disposing model ${currentModelId}...`);
+    try {
+      await currentExtractor.dispose();
+    } catch (e) {
+      console.warn(`[bekko] dispose failed:`, e);
+    }
+    currentExtractor = null;
+    currentModelId = null;
+  }
+
+  console.log(`[bekko] Loading model ${modelId}...`);
+  const t0 = Date.now();
+  currentExtractor = await pipeline("feature-extraction", modelId, {
+    dtype: "fp32",
+    device: "cpu",
+  });
+  currentModelId = modelId;
+  console.log(`[bekko] Model ${modelId} loaded in ${Date.now() - t0} ms`);
+  return currentExtractor;
 }
 
 // ============================================================
@@ -45,28 +60,7 @@ function cosine(a: number[], b: number[]): number {
 }
 
 // ============================================================
-// 4. Извлечение одного вектора из выхода pipeline
-//    feature-extraction возвращает Tensor [batch, seq, hidden].
-//    Для эмбеддинга берём mean pooling по токенам.
-// ============================================================
-function meanPool(output: any): number[] {
-  // output — Tensor; получаем размерности
-  const dims: number[] = output.dims; // [batch, seq, hidden]
-  const data: Float32Array = output.data;
-  const [batch, seq, hidden] = dims;
-
-  const result: number[] = new Array(hidden).fill(0);
-  for (let s = 0; s < seq; s++) {
-    for (let h = 0; h < hidden; h++) {
-      result[h] += data[s * hidden + h];
-    }
-  }
-  for (let h = 0; h < hidden; h++) result[h] /= seq;
-  return result;
-}
-
-// ============================================================
-// 5. HTTP-сервер
+// 4. HTTP-сервер
 // ============================================================
 const server = Bun.serve({
   port: PORT,
@@ -77,7 +71,8 @@ const server = Bun.serve({
     if (url.pathname === "/health") {
       return Response.json({
         status: "ok",
-        model_loaded: extractorPromise !== null,
+        current_model: currentModelId,
+        model_loaded: currentExtractor !== null,
       });
     }
 
@@ -85,6 +80,8 @@ const server = Bun.serve({
     if (url.pathname === "/embed" && req.method === "POST") {
       try {
         const body = await req.json();
+
+        const modelId: string = body.model || DEFAULT_MODEL;
 
         let texts: string[];
         let isPair = false;
@@ -101,15 +98,16 @@ const server = Bun.serve({
           );
         }
 
-        const extractor = await getExtractor();
+        const extractor = await getExtractor(modelId);
 
-        // Батч: pipeline принимает массив строк
+        const t0 = Date.now();
         const output = await extractor(texts, {
-          pooling: "cls",
+          pooling: "mean",
           normalize: true,
         });
+        const inferMs = Date.now() - t0;
 
-        // output — Tensor [batch, hidden] после pooling+normalize
+        // output — Tensor [batch, hidden]
         const dims: number[] = output.dims;
         const data: Float32Array = output.data;
         const batch = dims[0];
@@ -122,16 +120,25 @@ const server = Bun.serve({
 
         if (isPair) {
           return Response.json({
+            model: modelId,
+            inference_ms: inferMs,
             source_embedding: vectors[0],
             translation_embedding: vectors[1],
             cosine_similarity: cosine(vectors[0], vectors[1]),
           });
         }
 
-        return Response.json({ embeddings: vectors });
+        return Response.json({
+          model: modelId,
+          inference_ms: inferMs,
+          embeddings: vectors,
+        });
       } catch (e: any) {
         console.error("[bekko] embed error:", e);
-        return Response.json({ error: e.message ?? String(e) }, { status: 500 });
+        return Response.json(
+          { error: e.message ?? String(e) },
+          { status: 500 }
+        );
       }
     }
 
