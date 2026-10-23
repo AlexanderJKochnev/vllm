@@ -1,5 +1,8 @@
 # LAYA-AI
 проверка
+# --override-kv tokenizer.ggml.pooling_type=int:1
+
+
 
 curl http://localhost:8080/embeddings \
   -H "Content-Type: application/json" \
