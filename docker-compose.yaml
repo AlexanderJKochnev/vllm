@@ -47,7 +47,7 @@ services:
       --enable-lora
       --max-lora-rank 64
       --lora-modules gec-adapter=/lora/gec-adapter
-      --lora-extra-vocab-size 80
+      --lora-extra-vocab-size 256
     deploy:
       resources:
         reservations:
