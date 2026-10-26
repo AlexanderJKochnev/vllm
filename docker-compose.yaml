@@ -34,10 +34,11 @@ services:
     command: >
       --model /model
       --quantization fp8
-      --kv-cache-dtype fp8
+      --dtype bfloat16
+      --limit-mm-per-prompt image=0
       --gpu-memory-utilization 0.85
       --max-model-len 2048
-      --max-num-seqs 16
+      --max-num-seqs 12
       --max-num-batched-tokens 2048
       --enable-prefix-caching
       --trust-remote-code
