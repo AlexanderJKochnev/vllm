@@ -27,7 +27,7 @@ services:
       # - ${BIND_VOLUMES}/vllm_node/models/unsloth/unsloth-gemma-3-4b-it:/model
       # - ${BIND_VOLUMES}/vllm_node/models/google/v4_gemma3_4b_lorugec:/lora/gec-adapter
       # - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
-      - ${BIND_VOLUMES}/vllm_node/models/Qwen/Qwen2.5-7B-Instruct-GPTQ-Int4:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/Qwen/Qwen2.5-7B-Instruct-GPTQ-Int4:/model
     networks:
       vllm_network:
         ipv4_address: ${IP_VLLM}
