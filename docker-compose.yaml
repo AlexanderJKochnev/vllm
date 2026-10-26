@@ -42,6 +42,7 @@ services:
       --trust-remote-code
       --max-num-batched-tokens 4096
       --generation-config vllm
+      --quantization gptq
     deploy:
       resources:
         reservations:
