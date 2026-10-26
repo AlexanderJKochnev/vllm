@@ -33,16 +33,16 @@ services:
         ipv4_address: ${IP_VLLM}
     command: >
       --model /model
-      --gpu-memory-utilization 0.95
+      --quantization fp8
+      --kv-cache-dtype fp8
+      --gpu-memory-utilization 0.85
       --max-model-len 2048
-      --enable-prefix-caching
       --max-num-seqs 16
+      --max-num-batched-tokens 2048
+      --enable-prefix-caching
+      --trust-remote-code
       --disable-log-requests
       --disable-log-stats
-      --trust-remote-code
-      --max-num-batched-tokens 4096
-      --generation-config vllm
-      --quantization fp8
     deploy:
       resources:
         reservations:
