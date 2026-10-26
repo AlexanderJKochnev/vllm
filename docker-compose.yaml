@@ -24,6 +24,7 @@ services:
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-Instruct-GPTQ-Int8:/model
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-AWQ:/model
       - ${BIND_VOLUMES}/vllm_node/models/google/gemma-3-4b-it:/model
+      - ${BIND_VOLUMES}/vllm_node/models/google/v4_gemma3_4b_lorugec:/lora/gec-adapter
       # - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
       # - ${BIND_VOLUMES}/vllm_node/lora_adapters:/app/lora
     networks:
@@ -42,6 +43,9 @@ services:
       --max-num-batched-tokens 4096
       --enable-chunked-prefill
       --generation-config vllm
+      --enable-lora
+      --max-lora-rank 64
+      --lora-modules gec-adapter=/lora/gec-adapter
     deploy:
       resources:
         reservations:
@@ -50,51 +54,18 @@ services:
               count: 1
               capabilities: [gpu]
     restart: unless-stopped
-
-  bekko-embed:
-    build:
-      context: ./bekko-embed-service          # путь к папке
-      dockerfile: Dockerfile           # имя Dockerfile внутри ./preact_front
-    image: bekko-embed-cpu:local
-    container_name: bekko-embed
-    ports:
-      - "8200:8200"
-    environment:
-      # Ограничиваем потоки ONNX Runtime, чтобы не забивать CPU
-      - OMP_NUM_THREADS=4
-    deploy:
-      resources:
-        limits:
-          cpus: "2.0"
-          memory: 1G
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "bun", "-e", "fetch('http://localhost:8200/health').then(r=>{if(!r.ok)process.exit(1)})"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    networks:
-      vllm_network:
   
-  laya-api:
-    image: ghcr.io/ggml-org/llama.cpp:server
-    container_name: laya-cpu-server
-    ports:
-      - "8080:8080"
-    volumes:
-      # - ./laya-ai/models:/models
-      - ${BIND_VOLUMES}/laya-ai/models:/models
-    command: >
-      -m /models/Laya-Q8_0.gguf
-      --host 0.0.0.0
-      --port 8080
-      -c 2048
-      --embeddings
-      --pooling mean
-    restart: unless-stopped
+  # Это просто заглушка, чтобы формально "добавить сервис".
+  # Реально адаптер запускается внутри vllm-server.
+  lora-adapter-init:
+    image: alpine
+    container_name: lora-adapter-init
+    command: echo "LoRA adapter is mounted and served by vllm-server via --lora-modules"
+    depends_on:
+      - vllm-server
     networks:
-      vllm_network:
+      - vllm_network
+    restart: "no"
 
 networks:
   vllm_network:

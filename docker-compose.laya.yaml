@@ -1,0 +1,103 @@
+services:
+  vllm-server:
+    image: vllm:local
+    # image: vllm/vllm-openai:v0.8.5
+    container_name: vllm-node
+    runtime: nvidia
+    environment:
+      - VLLM_USE_MODELSCOPE=false
+      - VLLM_USE_V1=0
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - NVIDIA_VISIBLE_DEVICES=all
+      - HF_HUB_OFFLINE=1
+      - TRANSFORMERS_OFFLINE=1
+      - HF_TOKEN=${HF_TOKEN}
+      - HF_DEBUG=1
+      # - HF_ENDPOINT=https://hf-mirror.com
+      - NO_PROXY=localhost,127.0.0.1,.local,.abc8888.ru,172.0.0.0/8,huggingface.co,cdn-lfs.huggingface.co,.huggingface.co
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+    # ports:
+    #   - "127.0.0.1:8000:8000"
+    volumes:
+      # - /mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
+      # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-GPTQ:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-Instruct-GPTQ-Int8:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-AWQ:/model
+      - ${BIND_VOLUMES}/vllm_node/models/google/gemma-3-4b-it:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
+      # - ${BIND_VOLUMES}/vllm_node/lora_adapters:/app/lora
+    networks:
+      vllm_network:
+        ipv4_address: ${IP_VLLM}
+    command: >
+      --model /model
+      --dtype bfloat16
+      --gpu-memory-utilization 0.95
+      --max-model-len 2048
+      --enable-prefix-caching
+      --max-num-seqs 24
+      --disable-log-requests
+      --disable-log-stats
+      --trust-remote-code
+      --max-num-batched-tokens 4096
+      --enable-chunked-prefill
+      --generation-config vllm
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  bekko-embed:
+    build:
+      context: ./bekko-embed-service          # путь к папке
+      dockerfile: Dockerfile           # имя Dockerfile внутри ./preact_front
+    image: bekko-embed-cpu:local
+    container_name: bekko-embed
+    ports:
+      - "8200:8200"
+    environment:
+      # Ограничиваем потоки ONNX Runtime, чтобы не забивать CPU
+      - OMP_NUM_THREADS=4
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 1G
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "bun", "-e", "fetch('http://localhost:8200/health').then(r=>{if(!r.ok)process.exit(1)})"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      vllm_network:
+  
+  laya-api:
+    image: ghcr.io/ggml-org/llama.cpp:server
+    container_name: laya-cpu-server
+    expose:
+      - "8080"
+    volumes:
+      # - ./laya-ai/models:/models
+      - ${BIND_VOLUMES}/laya-ai/models:/models
+    command: >
+      -m /models/Laya-Q8_0.gguf
+      --host 0.0.0.0
+      --port 8080
+      -c 2048
+      --embeddings
+      --pooling mean
+    restart: unless-stopped
+    networks:
+      vllm_network:
+
+networks:
+  vllm_network:
+    name: vllm_network
+    driver: bridge
+    external: true

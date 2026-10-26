@@ -89,7 +89,7 @@ curl http://localhost:8080/v1/systemone \
   -d '{
     "state": {
       "source": "The palate seems rich with flavors of honey, lanolin and ripe, penetrating yellow peach and mango, but the texture and mouthfeel here are as light as a feather. It'\''s intensely juicy and fruity, but racy acidity and a crushed-slate minerality lends focus and balance.",
-      "translation": "Вкус кажется богатым оттенками мёда, ланолина и спелого, проникновенно яркого персика и манго, но текстура и ощущение здесь лёгкие, как перышко. Он интенсивно сочный и фруктовый, но яркая кислинка и минеральность колотого сланца придают концентрацию и баланс."
+      "translation": "Вкус кажется богатым оттенками мёда, ланолина и спелого, пронзительного персика и манго, но текстура и ощущение здесь лёгкие, как перышко. Он интенсивно сочный и фруктовый, но яркая кислинка и минеральность колотого сланца придают ему сосредоточенность и баланс."
     },
     "questions": {
       "contradicts_source": {
