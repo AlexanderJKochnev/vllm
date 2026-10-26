@@ -23,26 +23,24 @@ services:
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-GPTQ:/model
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-Instruct-GPTQ-Int8:/model
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-AWQ:/model
-      # - ${BIND_VOLUMES}/vllm_node/models/google/gemma-3-4b-it:/model
+      - ${BIND_VOLUMES}/vllm_node/models/google/gemma-3-4b-it:/model
       # - ${BIND_VOLUMES}/vllm_node/models/unsloth/unsloth-gemma-3-4b-it:/model
       # - ${BIND_VOLUMES}/vllm_node/models/google/v4_gemma3_4b_lorugec:/lora/gec-adapter
       # - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
-      - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-Coder-7B-Instruct-GPTQ-Int4:/model
+      - ${BIND_VOLUMES}/vllm_node/models/Qwen/Qwen2.5-Coder-7B-Instruct-GPTQ-Int4:/model
     networks:
       vllm_network:
         ipv4_address: ${IP_VLLM}
     command: >
       --model /model
-      --dtype bfloat16
-      --gpu-memory-utilization 0.95
-      --max-model-len 2048
+      --gpu-memory-utilization 0.90
+      --max-model-len 4096
       --enable-prefix-caching
-      --max-num-seqs 24
+      --max-num-seqs 16
       --disable-log-requests
       --disable-log-stats
       --trust-remote-code
       --max-num-batched-tokens 4096
-      --enable-chunked-prefill
       --generation-config vllm
     deploy:
       resources:
