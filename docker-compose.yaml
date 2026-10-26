@@ -33,7 +33,6 @@ services:
         ipv4_address: ${IP_VLLM}
     command: >
       --model /model
-      --dtype bfloat16
       --gpu-memory-utilization 0.95
       --max-model-len 2048
       --enable-prefix-caching
@@ -42,7 +41,6 @@ services:
       --disable-log-stats
       --trust-remote-code
       --max-num-batched-tokens 4096
-      --enable-chunked-prefill
       --generation-config vllm
       --quantization fp8
     deploy:
