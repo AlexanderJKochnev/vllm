@@ -25,7 +25,7 @@ services:
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-AWQ:/model
       # - ${BIND_VOLUMES}/vllm_node/models/google/gemma-3-4b-it:/model
       - ${BIND_VOLUMES}/vllm_node/models/unsloth/unsloth-gemma-3-4b-it:/model
-      - ${BIND_VOLUMES}/vllm_node/models/google/v4_gemma3_4b_lorugec:/lora/gec-adapter
+      # - ${BIND_VOLUMES}/vllm_node/models/google/v4_gemma3_4b_lorugec:/lora/gec-adapter
       # - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
       # - ${BIND_VOLUMES}/vllm_node/lora_adapters:/app/lora
     networks:
@@ -44,10 +44,6 @@ services:
       --max-num-batched-tokens 4096
       --enable-chunked-prefill
       --generation-config vllm
-      --enable-lora
-      --max-lora-rank 64
-      --lora-modules gec-adapter=/lora/gec-adapter
-      --lora-extra-vocab-size 256
     deploy:
       resources:
         reservations:
