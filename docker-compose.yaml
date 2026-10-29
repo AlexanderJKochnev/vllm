@@ -23,7 +23,8 @@ services:
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-GPTQ:/model
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-Instruct-GPTQ-Int8:/model
       # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-AWQ:/model
-      - ${BIND_VOLUMES}/vllm_node/models/google/gemma-3-4b-it:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/google/gemma-3-4b-it:/model
+      - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-Instruct-2407-quantized:/model
       # - ${BIND_VOLUMES}/vllm_node/models/unsloth/unsloth-gemma-3-4b-it:/model
       # - ${BIND_VOLUMES}/vllm_node/models/google/v4_gemma3_4b_lorugec:/lora/gec-adapter
       # - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
@@ -33,7 +34,7 @@ services:
         ipv4_address: ${IP_VLLM}
     command: >
       --model /model
-      --quantization fp8
+      --quantization gptq
       --dtype bfloat16
       --limit-mm-per-prompt image=0
       --gpu-memory-utilization 0.92
