@@ -36,7 +36,6 @@ services:
       --model /model
       --quantization gptq
       --dtype bfloat16
-      --limit-mm-per-prompt image=0
       --gpu-memory-utilization 0.92
       --max-model-len 4096
       --max-num-seqs 6
