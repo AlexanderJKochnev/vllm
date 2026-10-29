@@ -1,0 +1,72 @@
+services:
+  vllm-server:
+    image: vllm:local
+    # image: vllm/vllm-openai:v0.8.5
+    container_name: vllm-node
+    runtime: nvidia
+    environment:
+      - VLLM_USE_MODELSCOPE=false
+      - VLLM_USE_V1=0
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - NVIDIA_VISIBLE_DEVICES=all
+      - HF_HUB_OFFLINE=1
+      - TRANSFORMERS_OFFLINE=1
+      - HF_TOKEN=${HF_TOKEN}
+      - HF_DEBUG=1
+      # - HF_ENDPOINT=https://hf-mirror.com
+      - NO_PROXY=localhost,127.0.0.1,.local,.abc8888.ru,172.0.0.0/8,huggingface.co,cdn-lfs.huggingface.co,.huggingface.co
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+    # ports:
+    #   - "127.0.0.1:8000:8000"
+    volumes:
+      # - /mnt/hdd_data/volumes/vllm_node/models:/root/.cache/huggingface
+      # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-GPTQ:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-Instruct-GPTQ-Int8:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/Qwen2.5-7B-AWQ:/model
+      - ${BIND_VOLUMES}/vllm_node/models/google/gemma-3-4b-it:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/unsloth/unsloth-gemma-3-4b-it:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/google/v4_gemma3_4b_lorugec:/lora/gec-adapter
+      # - ${BIND_VOLUMES}/vllm_node/models/Mistral-Nemo-4bit:/model
+      # - ${BIND_VOLUMES}/vllm_node/models/Qwen/Qwen2.5-7B-Instruct-GPTQ-Int4:/model
+    networks:
+      vllm_network:
+        ipv4_address: ${IP_VLLM}
+    command: >
+      --model /model
+      --quantization fp8
+      --dtype bfloat16
+      --limit-mm-per-prompt image=0
+      --gpu-memory-utilization 0.85
+      --max-model-len 2048
+      --max-num-seqs 12
+      --max-num-batched-tokens 2048
+      --enable-prefix-caching
+      --trust-remote-code
+      --disable-log-requests
+      --disable-log-stats
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+  
+  # Это просто заглушка, чтобы формально "добавить сервис".
+  # Реально адаптер запускается внутри vllm-server.
+  lora-adapter-init:
+    image: alpine
+    container_name: lora-adapter-init
+    command: echo "LoRA adapter is mounted and served by vllm-server via --lora-modules"
+    depends_on:
+      - vllm-server
+    networks:
+      - vllm_network
+    restart: "no"
+
+networks:
+  vllm_network:
+    name: vllm_network
+    driver: bridge
+    external: true

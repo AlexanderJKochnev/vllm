@@ -36,10 +36,10 @@ services:
       --quantization fp8
       --dtype bfloat16
       --limit-mm-per-prompt image=0
-      --gpu-memory-utilization 0.85
-      --max-model-len 2048
-      --max-num-seqs 12
-      --max-num-batched-tokens 2048
+      --gpu-memory-utilization 0.92
+      --max-model-len 4096
+      --max-num-seqs 6
+      --max-num-batched-tokens 4096
       --enable-prefix-caching
       --trust-remote-code
       --disable-log-requests
