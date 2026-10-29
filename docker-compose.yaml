@@ -34,7 +34,7 @@ services:
         ipv4_address: ${IP_VLLM}
     command: >
       --model /model
-      --quantization gptq
+      --quantization compressed-tensors
       --dtype bfloat16
       --gpu-memory-utilization 0.92
       --max-model-len 4096
